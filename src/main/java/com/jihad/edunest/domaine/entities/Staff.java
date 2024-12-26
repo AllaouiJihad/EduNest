@@ -1,26 +1,27 @@
 package com.jihad.edunest.domaine.entities;
 
-import com.jihad.edunest.domaine.enums.UserRole;
+import com.jihad.edunest.domaine.enums.StaffRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AppUser {
+public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private UserRole role;
-    private Boolean active;
+
+    private String name;
+    private boolean active;
+
+    @Enumerated(EnumType.STRING)
+    private StaffRole    role;
+
+    @ManyToOne
+    @JoinColumn(name = "school_id")
+    private School school;
 }
