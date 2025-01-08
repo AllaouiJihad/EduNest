@@ -12,15 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AppUser {
+public abstract  class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private UserRole role;
-    private Boolean active;
+    protected Long id;
+    protected String firstName;
+    protected String lastName;
+    protected Boolean active;
 }
