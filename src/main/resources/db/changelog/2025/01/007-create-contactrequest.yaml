@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: jihad
+      changes:
+        - createTable:
+            tableName: contact_request
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: subject
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contact_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_contactrequest_member
+                    references: member(id)
+              - column:
+                  name: school_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_contactrequest_school
+                    references: school(id)

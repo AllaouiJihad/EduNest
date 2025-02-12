@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: jihad
+      changes:
+        - createTable:
+            tableName: school
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: postal_code
+                  type: varchar(20)
+              - column:
+                  name: city
+                  type: varchar(100)
+              - column:
+                  name: phone_number
+                  type: varchar(20)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: website
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_school_category
+                    references: category(id)

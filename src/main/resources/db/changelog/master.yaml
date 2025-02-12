@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/2025/01/001-create-appuser.yaml
+  - include:
+      file: db/changelog/2025/01/002-create-category.yaml
+  - include:
+      file: db/changelog/2025/01/004-create-school.yaml
+  - include:
+      file: db/changelog/2025/01/003-create-member.yaml
+  - include:
+      file: db/changelog/2025/01/005-create-staff.yaml
+  - include:
+      file: db/changelog/2025/01/006-create-review.yaml
+  - include:
+      file: db/changelog/2025/01/007-create-contactrequest.yaml

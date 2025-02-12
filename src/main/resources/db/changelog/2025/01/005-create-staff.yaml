@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: jihad
+      changes:
+        - createTable:
+            tableName: staff
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject
+                  type: varchar(255)
+              - column:
+                  name: grade_level
+                  type: varchar(100)
+              - column:
+                  name: experience_years
+                  type: int
+              - column:
+                  name: education_level
+                  type: varchar(255)
+              - column:
+                  name: school_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_staff_school
+                    references: school(id)

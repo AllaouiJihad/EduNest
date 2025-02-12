@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: jihad
+      changes:
+        - createTable:
+            tableName: review
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: content
+                  type: text
+              - column:
+                  name: rating
+                  type: float
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: school_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_review_school
+                    references: school(id)
+              - column:
+                  name: member_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_review_member
+                    references: member(id)

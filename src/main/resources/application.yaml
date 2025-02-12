@@ -1,0 +1,16 @@
+server:
+  port: 8443
+spring:
+  liquibase:
+    enabled: true
+    change-log: db/changelog/master.yaml
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/edunest
+    username: GreenPulse
+    password:
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
