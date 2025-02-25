@@ -2,9 +2,7 @@ package com.jihad.edunest.domaine.entities;
 
 import com.jihad.edunest.domaine.enums.SchoolStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class School {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

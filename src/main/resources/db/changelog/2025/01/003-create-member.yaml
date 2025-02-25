@@ -20,6 +20,12 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
                   name: password
                   type: varchar(255)
                   constraints:

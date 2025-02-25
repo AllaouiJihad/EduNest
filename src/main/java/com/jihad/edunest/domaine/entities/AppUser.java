@@ -1,17 +1,15 @@
 package com.jihad.edunest.domaine.entities;
 
-import com.jihad.edunest.domaine.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public abstract  class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +17,5 @@ public abstract  class AppUser {
     protected String firstName;
     protected String lastName;
     protected Boolean active;
+
 }
