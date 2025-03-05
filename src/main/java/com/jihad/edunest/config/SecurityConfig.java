@@ -32,10 +32,13 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/verify",
                                 "/api/auth/forgot-password",
-                                "api/auth//reset-password",
+                                "/api/auth/reset-password",
                                 "/swagger-ui/**", "/v3/api-docs/**"
                         ).permitAll()
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(
+                                "/api/schools/**", // Accès en lecture seule
+                                "/api/categories/**" // Si vous voulez exposer publiquement les catégories
+                        ).permitAll()
                         .anyRequest().authenticated()
 
                 )

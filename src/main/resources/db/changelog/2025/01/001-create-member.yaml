@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-member
+      author: jihad
+      changes:
+        - createTable:
+            tableName: member
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+              - column:
+                  name: last_name
+                  type: varchar(255)
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: verification_token
+                  type: varchar(255)
+              - column:
+                  name: verified
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: password_reset_token
+                  type: varchar(255)
+              - column:
+                  name: password_reset_token_expiry
+                  type: datetime
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false

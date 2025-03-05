@@ -48,6 +48,15 @@ public class School {
     private List<ContactRequest> contactRequests;
 
 
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FavoriteSchool> favoritedBy;
+
+    // Méthode utile
+    public int getFavoriteCount() {
+        return favoritedBy != null ? favoritedBy.size() : 0;
+    }
+
+
 
 
 }

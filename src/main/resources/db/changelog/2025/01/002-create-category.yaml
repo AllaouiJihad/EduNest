@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 2
+      id: 002-create-category
       author: jihad
       changes:
         - createTable:
@@ -27,5 +27,4 @@ databaseChangeLog:
               - column:
                   name: active
                   type: boolean
-                  constraints:
-                    nullable: false
+                  defaultValueBoolean: true

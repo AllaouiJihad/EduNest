@@ -12,10 +12,10 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("FolioFlex API Documentation")
+                        .title("EduNest API Documentation")
                         .version("1.0")
-                        .description("API documentation for FolioFlex, a portfolio management platform.")
-                        .termsOfService("https://folioflex.com/terms")
+                        .description("API documentation for EduNest, a platform connecting schools and students/parents.")
+                        .termsOfService("https://EduNest.com/terms")
                         .license(new License().name("Apache 2.0").url("https://springdoc.org")));
     }
 }

@@ -23,9 +23,11 @@ public class JwtService {
     private final String SECRET ;
     private final UserService userService;
 
-    public JwtService(@Value("${jwt.secret.key}") String SECRET, UserService userService, UserService userService1) {
+
+
+    public JwtService(@Value("${jwt.secret.key}") String SECRET, UserService userService) {
         this.SECRET = SECRET;
-        this.userService = userService1;
+        this.userService = userService;
     }
 
     public String extractUsername(String token) {

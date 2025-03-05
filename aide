@@ -1,0 +1,10 @@
+    // ---------------ajout de staff les etapes:
+    School school = schoolRepository.findById(1L).orElseThrow();
+    User user = userRepository.findById(1L).orElseThrow();
+
+    Staff staff = new Staff();
+    staff.setSchool(school);
+    staff.setUser(user);
+    staffRepository.save(staff);
+
+

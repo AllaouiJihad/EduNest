@@ -3,15 +3,23 @@ package com.jihad.edunest.service.implimentations;
 import com.jihad.edunest.domaine.entities.Member;
 import com.jihad.edunest.domaine.enums.UserRole;
 import com.jihad.edunest.exception.user.UserNameAlreadyExistsException;
+import com.jihad.edunest.exception.user.UserNotFoundException;
+import com.jihad.edunest.exception.user.UsernameOrPasswordInvalidException;
 import com.jihad.edunest.repository.MemberRepository;
 import com.jihad.edunest.service.AuthService;
 import com.jihad.edunest.web.vms.mapper.UserVMMapper;
 import com.jihad.edunest.web.vms.request.RegisterVM;
 import com.jihad.edunest.web.vms.responce.TokenVM;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +30,6 @@ public class AuthenticationServiceImpl implements AuthService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
 
     public TokenVM register(@Valid RegisterVM registerVM, String clientOrigin) {
 
@@ -40,10 +47,11 @@ public class AuthenticationServiceImpl implements AuthService {
 
 
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        newUser.setRole(UserRole.PARENT);
+        newUser.setRole(UserRole.MEMBER);
         newUser.setVerificationToken(generateVerificationToken());
 
-        User savedUser = userRepository.save(newUser);
+        Member savedUser = userRepository.save(newUser);
+
         String authToken = jwtService.generateToken(savedUser.getUsername());
         String refreshToken = jwtService.generateRefreshToken(savedUser.getUsername());
 
@@ -55,7 +63,7 @@ public class AuthenticationServiceImpl implements AuthService {
 
     public TokenVM login(String username, String password) {
 
-        Optional<User> opUser;
+        Optional<Member> opUser;
         if (isEmail(username)) opUser = userRepository.findByEmailAndDeletedFalse(username);
         else opUser = userRepository.findByUsernameAndDeletedFalse(username);
 
@@ -79,7 +87,8 @@ public class AuthenticationServiceImpl implements AuthService {
             throw new ExpiredJwtException(null, null, "Refresh token has expired");
         }
         String username = jwtService.extractUsername(refreshToken);
-
+        userService.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         if (!jwtService.isTokenValid(refreshToken,username )) {
             throw new UsernameOrPasswordInvalidException("Invalid refresh token");
         }
@@ -93,7 +102,7 @@ public class AuthenticationServiceImpl implements AuthService {
 
 
     public void verifyEmail(String token) {
-        User user = userRepository.findByVerificationToken(token)
+        Member user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid verification token."));
 
         user.setVerified(true);
@@ -103,7 +112,7 @@ public class AuthenticationServiceImpl implements AuthService {
     }
 
     public void forgotPassword(String email, String clientOrigin) {
-        User user = userRepository.findByEmailAndDeletedFalse(email)
+        Member user = userRepository.findByEmailAndDeletedFalse(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
 
         String resetToken = generatePasswordResetToken();
@@ -115,7 +124,7 @@ public class AuthenticationServiceImpl implements AuthService {
     }
 
     public void resetPassword(String token, String newPassword) {
-        User user = userRepository.findByPasswordResetToken(token)
+        Member user = userRepository.findByPasswordResetToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid password reset token."));
 
         if (user.getPasswordResetTokenExpiry().isBefore(LocalDateTime.now())) {
@@ -133,7 +142,7 @@ public class AuthenticationServiceImpl implements AuthService {
     public String generateVerificationToken() {
         String token = UUID.randomUUID().toString();
 
-        List<User>  user = userRepository.findAllByVerificationToken(token);
+        List<Member> user = userRepository.findAllByVerificationToken(token);
 
         if(!user.isEmpty()) return generateVerificationToken();
 
@@ -143,7 +152,7 @@ public class AuthenticationServiceImpl implements AuthService {
     public String generatePasswordResetToken() {
         String token = UUID.randomUUID().toString();
 
-        List<User>  user = userRepository.findAllByPasswordResetToken(token);
+        List<Member>  user = userRepository.findAllByPasswordResetToken(token);
 
         if(!user.isEmpty()) return generatePasswordResetToken();
 

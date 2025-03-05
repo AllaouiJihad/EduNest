@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 6
+      id: 010-create-school-visit
       author: jihad
       changes:
         - createTable:
-            tableName: review
+            tableName: school_visit
             columns:
               - column:
                   name: id
@@ -14,27 +14,34 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: content
-                  type: text
-              - column:
-                  name: rating
-                  type: float
-              - column:
-                  name: created_at
+                  name: visit_time
                   type: datetime
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
                   constraints:
                     nullable: false
               - column:
                   name: school_id
                   type: bigint
                   constraints:
-                    nullable: true
-                    foreignKeyName: fk_review_school
+                    foreignKeyName: fk_visit_school
                     references: school(id)
+                    nullable: false
               - column:
                   name: member_id
                   type: bigint
                   constraints:
-                    nullable: true
-                    foreignKeyName: fk_review_member
+                    foreignKeyName: fk_visit_member
                     references: member(id)
+                    nullable: true
+        - createIndex:
+            indexName: idx_visit_school
+            tableName: school_visit
+            columns:
+              - column:
+                  name: school_id
+        - createIndex:
+            indexName: idx_visit_member
+            tableName: school_visit
+            columns:
+              - column:
+                  name: member_id

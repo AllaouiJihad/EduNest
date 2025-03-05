@@ -64,7 +64,7 @@ public class UserService {
 
     @Transactional
     public boolean markUserAsDeleted(Long userId) {
-        User user = userRepository.findById(userId)
+        Member user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setDeleted(true);
         userRepository.save(user);

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 5
+      id: 008-create-school-image
       author: jihad
       changes:
         - createTable:
-            tableName: staff
+            tableName: school_image
             columns:
               - column:
                   name: id
@@ -14,26 +14,27 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: role
-                  type: varchar(50)
+                  name: url
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: subject
+                  name: caption
                   type: varchar(255)
               - column:
-                  name: grade_level
-                  type: varchar(100)
-              - column:
-                  name: experience_years
+                  name: sort_order
                   type: int
-              - column:
-                  name: education_level
-                  type: varchar(255)
+                  defaultValue: 0
               - column:
                   name: school_id
                   type: bigint
                   constraints:
-                    nullable: true
-                    foreignKeyName: fk_staff_school
+                    foreignKeyName: fk_image_school
                     references: school(id)
+                    nullable: false
+        - createIndex:
+            indexName: idx_image_school
+            tableName: school_image
+            columns:
+              - column:
+                  name: school_id

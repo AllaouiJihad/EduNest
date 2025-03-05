@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 4
+      id: 003-create-school
       author: jihad
       changes:
         - createTable:
@@ -48,6 +48,23 @@ databaseChangeLog:
                   name: category_id
                   type: bigint
                   constraints:
-                    nullable: true
                     foreignKeyName: fk_school_category
                     references: category(id)
+        - createIndex:
+            indexName: idx_school_name
+            tableName: school
+            columns:
+              - column:
+                  name: name
+        - createIndex:
+            indexName: idx_school_city
+            tableName: school
+            columns:
+              - column:
+                  name: city
+        - createIndex:
+            indexName: idx_school_category
+            tableName: school
+            columns:
+              - column:
+                  name: category_id
