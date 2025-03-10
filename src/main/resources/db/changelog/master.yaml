@@ -1,23 +1,25 @@
 databaseChangeLog:
+#  - include:
+#      file: db/changelog/2025/01/001-create-member.yaml
+#  - include:
+#      file: db/changelog/2025/01/002-create-category.yaml
+#  - include:
+#      file: db/changelog/2025/01/003-create-school.yaml
+#  - include:
+#      file: db/changelog/2025/01/004-create-staff.yaml
+#  - include:
+#      file: db/changelog/2025/01/005-create-review.yaml
+#  - include:
+#      file: db/changelog/2025/01/006-create-contact-request.yaml
+#  - include:
+#      file: db/changelog/2025/01/007-create-school-administrator.yaml
+#  - include:
+#      file: db/changelog/2025/01/008-create-school-image.yaml
+#  - include:
+#      file: db/changelog/2025/01/009-create-favorite-school.yaml
+#  - include:
+#      file: db/changelog/2025/01/010-create-school-visit.yaml
   - include:
-      file: db/changelog/2025/01/001-create-member.yaml
-  - include:
-      file: db/changelog/2025/01/002-create-category.yaml
-  - include:
-      file: db/changelog/2025/01/003-create-school.yaml
-  - include:
-      file: db/changelog/2025/01/004-create-staff.yaml
-  - include:
-      file: db/changelog/2025/01/005-create-review.yaml
-  - include:
-      file: db/changelog/2025/01/006-create-contact-request.yaml
-  - include:
-      file: db/changelog/2025/01/007-create-school-administrator.yaml
-  - include:
-      file: db/changelog/2025/01/008-create-school-image.yaml
-  - include:
-      file: db/changelog/2025/01/009-create-favorite-school.yaml
-  - include:
-      file: db/changelog/2025/01/010-create-school-visit.yaml
-  - include:
-      file: db/changelog/2025/01/ 011-insert-initial-data.yaml
+      file: db/changelog/2025/03/10-01-changelog.yaml
+#  - include:
+#      file: db/changelog/2025/01/011-insert-initial-data.yaml

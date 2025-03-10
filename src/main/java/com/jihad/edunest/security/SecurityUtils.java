@@ -34,10 +34,10 @@ public class SecurityUtils {
      * @return true si le membre est admin de cette école, false sinon
      */
     public static boolean isSchoolAdministrator(Member member, School school) {
-        // Si vous avez implémenté SchoolAdministrator comme suggéré
-        // Cette logique devra être adaptée selon votre implémentation réelle
-        return school.getMember() != null &&
-                school.getMember().getId().equals(member.getId());
+        // Utilise la nouvelle relation via l'objet administrator
+        return school.getAdministrator() != null &&
+                school.getAdministrator().getMember() != null &&
+                school.getAdministrator().getMember().getId().equals(member.getId());
     }
 
     /**

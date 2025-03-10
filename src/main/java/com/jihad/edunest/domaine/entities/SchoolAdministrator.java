@@ -17,11 +17,11 @@ public class SchoolAdministrator {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "school_id")
+    @JoinColumn(name = "school_id", nullable = false)
     private School school;
 
     private LocalDateTime assignedDate;

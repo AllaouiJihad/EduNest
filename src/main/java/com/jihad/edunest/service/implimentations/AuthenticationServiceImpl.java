@@ -12,7 +12,10 @@ import com.jihad.edunest.web.vms.request.RegisterVM;
 import com.jihad.edunest.web.vms.responce.TokenVM;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +36,6 @@ public class AuthenticationServiceImpl implements AuthService {
 
     public TokenVM register(@Valid RegisterVM registerVM, String clientOrigin) {
 
-        userService.findByUsername(registerVM.getUsername())
-                .ifPresent(existingUser -> {
-                    throw new UserNameAlreadyExistsException("Username already exists");
-                });
 
         userService.findByEmail(registerVM.getEmail())
                 .ifPresent(existingUser -> {
@@ -61,24 +60,23 @@ public class AuthenticationServiceImpl implements AuthService {
     }
 
 
-    public TokenVM login(String username, String password) {
-
-        Optional<Member> opUser;
-        if (isEmail(username)) opUser = userRepository.findByEmailAndDeletedFalse(username);
-        else opUser = userRepository.findByUsernameAndDeletedFalse(username);
-
-        return opUser.filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(authenticatedUser -> {
-
-                    String authToken = jwtService.generateToken(authenticatedUser.getUsername());
-                    String refreshToken = jwtService.generateRefreshToken(authenticatedUser.getUsername());
-                    return TokenVM.builder()
-                            .token(authToken)
-                            .refreshToken(refreshToken)
-                            .build();
-                })
+    public TokenVM login(String email, String password) {
+        Member user = userRepository.findByEmailAndDeletedFalse(email)
                 .orElseThrow(() -> new UsernameOrPasswordInvalidException("Invalid credentials."));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new UsernameOrPasswordInvalidException("Invalid credentials.");
+        }
+
+        String authToken = jwtService.generateToken(user.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+
+        return TokenVM.builder()
+                .token(authToken)
+                .refreshToken(refreshToken)
+                .build();
     }
+
 
 
     public TokenVM refresh(String refreshToken) {
@@ -86,7 +84,7 @@ public class AuthenticationServiceImpl implements AuthService {
         if(jwtService.isTokenExpired(refreshToken)) {
             throw new ExpiredJwtException(null, null, "Refresh token has expired");
         }
-        String username = jwtService.extractUsername(refreshToken);
+        String username = jwtService.extractEmail(refreshToken);
         userService.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         if (!jwtService.isTokenValid(refreshToken,username )) {

@@ -30,14 +30,13 @@ public class JwtService {
         this.userService = userService;
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(String username) {
-        return generateToken(new HashMap<>(), username);
+    public String generateToken(String email) {
+        return generateToken(new HashMap<>(), email);
     }
-
     public String generateToken(Map<String, Object> claims, String username) {
         claims.put("role", extractRole(username));
         // put permissions
@@ -83,9 +82,9 @@ public class JwtService {
                 .getBody();
     }
 
-    public boolean isTokenValid(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+    public boolean isTokenValid(String token, String email) {
+        final String extractedEmail = extractEmail(token); // En réalité, extrait l'email
+        return (extractedEmail.equals(email)) && !isTokenExpired(token);
     }
 
     public boolean isTokenExpired(String token) {

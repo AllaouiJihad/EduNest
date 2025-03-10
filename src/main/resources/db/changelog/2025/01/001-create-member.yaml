@@ -65,3 +65,17 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: 002-add-school-relation-to-member
+      author: jihad
+      changes:
+        - addColumn:
+            tableName: member
+            columns:
+              - column:
+                  name: school_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_member_school
+                    references: school(id)

@@ -12,8 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RegisterVM {
-    @NotBlank(message = "Username is required.")
-    private String username;
+    @Email(message = "Email should be valid.")
+    @NotBlank(message = "Email is required.")
+    private String email;
 
     @NotBlank(message = "Password is required.")
     @Size(min = 8, message = "Password must be at least 8 characters long.")
@@ -22,7 +23,17 @@ public class RegisterVM {
     @Pattern(regexp = ".*[0-9].*", message = "Password must contain at least one digit.")
     private String password;
 
-    @Email(message = "Email should be valid.")
-    @NotBlank(message = "Email is required.")
-    private String email;
+
+    @NotBlank(message = "First name is required.")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required.")
+    private String lastName;
+
+
+    @NotBlank(message = "Phone number is required.")
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number must be valid.")
+    private String phone;
+
+
 }

@@ -4,20 +4,20 @@ import com.jihad.edunest.domaine.entities.Member;
 import com.jihad.edunest.exception.user.UserNotFoundException;
 import com.jihad.edunest.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final MemberRepository userRepository;
+    private final   MemberRepository userRepository;
     private final LocalDateTime licenseExpirationDate = LocalDateTime.now().plusYears(1);
 
 

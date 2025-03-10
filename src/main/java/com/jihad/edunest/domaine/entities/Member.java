@@ -28,6 +28,7 @@ public class Member implements UserDetails {
     private String email;
     private String password;
     private String phone;
+    private String username;
 
     private Boolean deleted = false;
     private String verificationToken;
@@ -38,8 +39,8 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private School school;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    private School school;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ContactRequest> contactRequests;

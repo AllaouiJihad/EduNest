@@ -14,51 +14,91 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SchoolServiceImpl implements SchoolService {
     private final SchoolRepository schoolRepository;
+    private final MemberRepository memberRepository;
+    private final SchoolAdministratorRepository schoolAdminRepository;
+    private final CategoryRepository categoryRepository;
 
-    // Créer une école
+    @Override
     @Transactional
-    public School createSchool(School school) {
-        school.setStatus(SchoolStatus.PENDING); // Par défaut, l'école est active
+    public School createSchool(SchoolCreateDTO schoolDTO, Long memberId) {
+        // Vérifier si le membre existe
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + memberId));
+
+        // Vérifier si l'utilisateur a déjà une école
+        schoolAdminRepository.findByMemberId(memberId).ifPresent(admin -> {
+            throw new IllegalStateException("User already administrates a school");
+        });
+
+        // Créer l'école
+        School school = new School();
+        school.setName(schoolDTO.getName());
+        school.setAddress(schoolDTO.getAddress());
+        school.setPostalCode(schoolDTO.getPostalCode());
+        school.setCity(schoolDTO.getCity());
+        school.setPhoneNumber(schoolDTO.getPhoneNumber());
+        school.setEmail(schoolDTO.getEmail());
+        school.setWebsite(schoolDTO.getWebsite());
+        school.setDescription(schoolDTO.getDescription());
+        school.setStatus(SchoolStatus.PENDING); // Status initial en attente de validation
+
+        // Définir la catégorie
+        if (schoolDTO.getCategoryId() != null) {
+            Category category = categoryRepository.findById(schoolDTO.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            school.setCategory(category);
+        }
+
+        // Sauvegarder l'école
+        School savedSchool = schoolRepository.save(school);
+
+        // Créer l'administrateur de l'école
+        SchoolAdministrator admin = new SchoolAdministrator();
+        admin.setMember(member);
+        admin.setSchool(savedSchool);
+        admin.setAssignedDate(LocalDateTime.now());
+        admin.setIsActive(true);
+
+        schoolAdminRepository.save(admin);
+
+        return savedSchool;
+    }
+
+    @Override
+    public School getSchoolById(Long id) {
+        return schoolRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("School not found with id: " + id));
+    }
+
+    @Override
+    public List<School> getAllApprovedSchools() {
+        return schoolRepository.findByStatus(SchoolStatus.APPROVED);
+    }
+
+    @Override
+    @Transactional
+    public School updateSchoolStatus(Long id, SchoolStatus status) {
+        School school = getSchoolById(id);
+        school.setStatus(status);
         return schoolRepository.save(school);
     }
 
-    // Récupérer une école par son ID
-    public Optional<School> getSchoolById(Long id) {
-        return schoolRepository.findById(id);
-    }
-
-    // Récupérer toutes les écoles
-    public List<School> getAllSchools() {
-        return schoolRepository.findAll();
-    }
-
-    // Mettre à jour une école
+    @Override
     @Transactional
-    public School updateSchool(Long id, School updatedSchool) {
-        return schoolRepository.findById(id)
-                .map(school -> {
-                    school.setName(updatedSchool.getName());
-                    school.setAddress(updatedSchool.getAddress());
-                    school.setPostalCode(updatedSchool.getPostalCode());
-                    school.setCity(updatedSchool.getCity());
-                    school.setPhoneNumber(updatedSchool.getPhoneNumber());
-                    school.setEmail(updatedSchool.getEmail());
-                    school.setWebsite(updatedSchool.getWebsite());
-                    school.setDescription(updatedSchool.getDescription());
-                    school.setStatus(updatedSchool.getStatus());
-                    return schoolRepository.save(school);
-                })
-                .orElseThrow(() -> new RuntimeException("École non trouvée avec l'ID : " + id));
+    public School updateSchool(Long id, SchoolUpdateDTO schoolDTO) {
+        School school = getSchoolById(id);
+
+        // Mettre à jour les champs
+        if (schoolDTO.getName() != null) {
+            school.setName(schoolDTO.getName());
+        }
+        if (schoolDTO.getAddress() != null) {
+            school.setAddress(schoolDTO.getAddress());
+        }
+        // Continuer pour tous les champs...
+
+        return schoolRepository.save(school);
     }
 
-    // Supprimer une école
-    @Transactional
-    public void deleteSchool(Long id) {
-        schoolRepository.deleteById(id);
-    }
-
-    // Rechercher des écoles par statut
-    public List<School> getSchoolsByStatus(SchoolStatus status) {
-        return schoolRepository.findByStatus(status);
-    }
+    // Autres méthodes comme recherche par critères, etc.
 }

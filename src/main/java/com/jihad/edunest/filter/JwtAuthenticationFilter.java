@@ -38,10 +38,10 @@
 
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
                     String token = authHeader.substring(7);
-                    String username = jwtUtil.extractUsername(token);
+                    String email = jwtUtil.extractEmail(token);
 
-                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
                         if (!jwtUtil.isTokenExpired(token) && jwtUtil.isTokenValid(token, userDetails.getUsername())) {
                             var authToken = new UsernamePasswordAuthenticationToken(
@@ -68,13 +68,13 @@
 
         private void handleRefreshToken(String refreshToken, HttpServletResponse response) throws IOException {
             try {
-                String username = jwtUtil.extractUsername(refreshToken);
-                if (jwtUtil.isTokenValid(refreshToken, username)) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                String email = jwtUtil.extractEmail(refreshToken);
+                if (jwtUtil.isTokenValid(refreshToken, email)) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
                     // Generate new tokens and send them in response
-                    String newAccessToken = jwtUtil.generateToken(username);
-                    String newRefreshToken = jwtUtil.generateRefreshToken(username);
+                    String newAccessToken = jwtUtil.generateToken(email);
+                    String newRefreshToken = jwtUtil.generateRefreshToken(email);
 
                     // Mettre à jour le contexte de sécurité pour cette requête
                     var authToken = new UsernamePasswordAuthenticationToken(
