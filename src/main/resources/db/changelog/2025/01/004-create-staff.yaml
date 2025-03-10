@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 5
+      id: 004-create-staff
       author: jihad
       changes:
         - createTable:
@@ -12,11 +12,6 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    nullable: false
-              - column:
-                  name: role
-                  type: varchar(50)
-                  constraints:
                     nullable: false
               - column:
                   name: subject
@@ -34,6 +29,23 @@ databaseChangeLog:
                   name: school_id
                   type: bigint
                   constraints:
-                    nullable: true
                     foreignKeyName: fk_staff_school
                     references: school(id)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_staff_member
+                    references: member(id)
+        - createIndex:
+            indexName: idx_staff_school
+            tableName: staff
+            columns:
+              - column:
+                  name: school_id
+        - createIndex:
+            indexName: idx_staff_user
+            tableName: staff
+            columns:
+              - column:
+                  name: user_id

@@ -2,19 +2,19 @@ package com.jihad.edunest.domaine.entities;
 
 import com.jihad.edunest.domaine.enums.StaffRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Staff extends AppUser{
+@Getter
+@Setter
+public class Staff{
 
-
-    @Enumerated(EnumType.STRING)
-    private StaffRole  role;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String subject; //Matière enseignée
     private String gradeLevel; // Niveau scolaire (exemple : Primaire, Collège, Lycée)
     private int experienceYears;
@@ -23,5 +23,11 @@ public class Staff extends AppUser{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id")
     private School school;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Member Member;
+
+
 
 }

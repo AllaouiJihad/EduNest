@@ -1,16 +1,44 @@
 server:
-  port: 8443
+  port: 8448
+
 spring:
   liquibase:
     enabled: true
     change-log: db/changelog/master.yaml
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: allaouijihad05@gmail.com
+    password: votre_mot_de_passe_gmail
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/edunest
-    username: GreenPulse
-    password:
+    url: jdbc:postgresql://localhost:5433/edunest
+    username: edunest
+    password: edunest
+
   jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: none
     properties:
       hibernate:
+        format_sql: true
         default_schema: public
+
+jwt:
+  secret:
+    key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+logging:
+  level:
+    org.springframework: DEBUG
+#    org.hibernate: DEBUG
+#    org.postgresql: DEBUG
+#    liquibase: DEBUG

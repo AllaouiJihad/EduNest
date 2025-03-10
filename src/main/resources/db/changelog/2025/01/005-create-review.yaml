@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-review
+      author: jihad
+      changes:
+        - createTable:
+            tableName: review
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: content
+                  type: text
+              - column:
+                  name: rating
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  name: school_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_review_school
+                    references: school(id)
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_review_member
+                    references: member(id)
+                    nullable: false
+        - createIndex:
+            indexName: idx_review_school
+            tableName: review
+            columns:
+              - column:
+                  name: school_id
+        - createIndex:
+            indexName: idx_review_member
+            tableName: review
+            columns:
+              - column:
+                  name: member_id

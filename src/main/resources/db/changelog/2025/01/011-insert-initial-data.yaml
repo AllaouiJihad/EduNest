@@ -1,0 +1,80 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-insert-initial-admin
+      author: jihad
+      changes:
+        - insert:
+            tableName: member
+            columns:
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: $2a$10$N/A9wQ7.KM6JaJMIjWIk6.M8VRpHPrzRwpIyJJUP4H/Nlq.3JA2Hy # bcrypt pour "password"
+              - column:
+                  name: email
+                  value: admin@edunest.com
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: User
+              - column:
+                  name: active
+                  valueBoolean: true
+              - column:
+                  name: verified
+                  valueBoolean: true
+              - column:
+                  name: role
+                  value: ADMIN
+
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: name
+                  value: Primaire
+              - column:
+                  name: type
+                  value: LEVEL
+              - column:
+                  name: description
+                  value: Écoles primaires (6-11 ans)
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: name
+                  value: Collège
+              - column:
+                  name: type
+                  value: LEVEL
+              - column:
+                  name: description
+                  value: Collèges (11-15 ans)
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: name
+                  value: Lycée
+              - column:
+                  name: type
+                  value: LEVEL
+              - column:
+                  name: description
+                  value: Lycées (15-18 ans)
+              - column:
+                  name: active
+                  valueBoolean: true

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 3
+      id: 008-create-school-image
       author: jihad
       changes:
         - createTable:
-            tableName: member
+            tableName: school_image
             columns:
               - column:
                   name: id
@@ -14,28 +14,27 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: email
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: password
+                  name: url
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: phone
-                  type: varchar(20)
+                  name: caption
+                  type: varchar(255)
               - column:
-                  name: role
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
+                  name: sort_order
+                  type: int
+                  defaultValue: 0
               - column:
                   name: school_id
                   type: bigint
                   constraints:
-                    nullable: true
-                    foreignKeyName: fk_member_school
+                    foreignKeyName: fk_image_school
                     references: school(id)
+                    nullable: false
+        - createIndex:
+            indexName: idx_image_school
+            tableName: school_image
+            columns:
+              - column:
+                  name: school_id
