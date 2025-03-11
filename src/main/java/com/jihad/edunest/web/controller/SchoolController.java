@@ -4,6 +4,7 @@ import com.jihad.edunest.domaine.entities.Member;
 import com.jihad.edunest.domaine.entities.School;
 import com.jihad.edunest.domaine.enums.SchoolStatus;
 import com.jihad.edunest.exception.user.UserNotFoundException;
+import com.jihad.edunest.service.CategoryService;
 import com.jihad.edunest.service.SchoolService;
 import com.jihad.edunest.web.vms.mapper.SchoolMapper;
 import com.jihad.edunest.web.vms.request.SchoolCreateDTO;
