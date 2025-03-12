@@ -1,115 +1,112 @@
 package com.jihad.edunest.exception;
 
-import com.jihad.edunest.exception.user.UserNameAlreadyExistsException;
-import com.jihad.edunest.exception.user.UserNotFoundException;
-import com.jihad.edunest.exception.user.UsernameOrPasswordInvalidException;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.jihad.edunest.web.vms.responce.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
-import javax.management.relation.RoleNotFoundException;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // --------------- User Exception-----------------------
-    //  ---------------  UserNotFoundException ----------------//
-    @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, Object>> handleUserNotFoundException(
-            UserNotFoundException ex, WebRequest request) {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString());
-        responseBody.put("status", HttpStatus.BAD_REQUEST.value());
-        responseBody.put("error", "Bad Request");
-        responseBody.put("message", ex.getMessage());
-        responseBody.put("path", request.getDescription(false).replace("uri=", ""));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ErrorResponse> handleApiException(ApiException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getStatus().value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
 
-    //  ---------------  RoleNotFoundException ---------------
-    @ExceptionHandler(RoleNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Map<String, Object>> handleRoleNotFoundException(
-            RoleNotFoundException ex, WebRequest request) {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString());
-        responseBody.put("status", HttpStatus.NOT_FOUND.value());
-        responseBody.put("error", "Not Found");
-        responseBody.put("message", ex.getMessage());
-        responseBody.put("path", request.getDescription(false).replace("uri=", ""));
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        String errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining(", "));
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Erreur de validation: " + errors,
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    //  ---------------  UserNameAlreadyExistsException
-    @ExceptionHandler(UserNameAlreadyExistsException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<Map<String, Object>> handleUserNameAlreadyExistsException(
-            UserNameAlreadyExistsException ex, WebRequest request) {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString());
-        responseBody.put("status", HttpStatus.CONFLICT.value());
-        responseBody.put("error", "Conflict");
-        responseBody.put("message", ex.getMessage());
-        responseBody.put("path", request.getDescription(false).replace("uri=", "")); // Request path
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        String errors = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.joining(", "));
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Erreur de validation: " + errors,
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    //  ---------------  UsernameOrPasswordInvalidException
-    @ExceptionHandler(UsernameOrPasswordInvalidException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Map<String, Object>> handleUsernameOrPasswordInvalidException(
-            UsernameOrPasswordInvalidException ex, WebRequest request) {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString());
-        responseBody.put("status", HttpStatus.UNAUTHORIZED.value());
-        responseBody.put("error", "Unauthorized");
-        responseBody.put("message", ex.getMessage());
-        responseBody.put("path", request.getDescription(false).replace("uri=", "")); // Request path
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorResponse> handleBindException(BindException ex) {
+        String errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.joining(", "));
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Erreur de validation: " + errors,
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException() {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Identifiants incorrects",
+                LocalDateTime.now()
+        );
 
-    /** --------------------------------------- Global Exceptions  */
-
-    //  ---------------  FieldCannotBeNullException
-    @ExceptionHandler(FieldCannotBeNullException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Map<String, Object>> handleFieldCannotBeNullException(
-            FieldCannotBeNullException ex, WebRequest request) {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString());
-        responseBody.put("status", HttpStatus.BAD_REQUEST.value());
-        responseBody.put("error", "Bad Request");
-        responseBody.put("message", ex.getMessage());
-        responseBody.put("path", request.getDescription(false).replace("uri=", ""));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException() {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.FORBIDDEN.value(),
+                "Accès refusé",
+                LocalDateTime.now()
+        );
 
-    //ExpiredJwtException
-    @ExceptionHandler(ExpiredJwtException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<Map<String, Object>> handleExpiredJwtException(WebRequest request) {
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("timestamp", Instant.now().toString());
-        responseBody.put("status", HttpStatus.UNAUTHORIZED.value());
-        responseBody.put("error", "Unauthorized");
-        responseBody.put("message", "Access token expired");
-        responseBody.put("path", request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Une erreur inattendue s'est produite: " + ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

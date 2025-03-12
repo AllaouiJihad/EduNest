@@ -9,8 +9,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: allaouijihad05@gmail.com
-    password: votre_mot_de_passe_gmail
+    username: your-email@gmail.com
+    password: your-app-password
     properties:
       mail:
         smtp:
@@ -25,17 +25,22 @@ spring:
     password: edunest
 
   jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: none
+    hibernate:
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        default_schema: public
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-jwt:
-  secret:
-    key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # 1 jour en millisecondes
+      refresh-token:
+        expiration: 604800000 # 7 jours en millisecondes
+
 logging:
   level:
     org.springframework: DEBUG

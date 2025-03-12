@@ -10,19 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
-    Optional<Member> findByUsernameAndDeletedFalse(String username);
-
-    Optional<Member> findByEmailAndDeletedFalse(String email);
-
-    Page<Member> findByUsernameContainingOrEmailContainingAndDeletedFalse(String username,
-                                                                            String email,
-                                                                            Pageable pageable);
-
-    Optional<Member> findByVerificationToken(String verificationToken);
-
-    List<Member> findAllByVerificationToken(String token);
-
-    Optional<Member> findByPasswordResetToken(String passwordResetToken);
-
-    List<Member> findAllByPasswordResetToken(String token);
+    Optional<Member> findByEmail(String email);
+    Optional<Member> findByVerificationToken(String token);
+    Optional<Member> findByPasswordResetToken(String token);
+    boolean existsByEmail(String email);
 }

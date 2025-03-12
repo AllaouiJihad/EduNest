@@ -2,6 +2,7 @@ package com.jihad.edunest.service;
 
 import com.jihad.edunest.domaine.entities.ContactRequest;
 import com.jihad.edunest.domaine.enums.ContactStatus;
+import com.jihad.edunest.web.vms.request.ContactRequestCreateDTO;
 
 import java.util.List;
 
