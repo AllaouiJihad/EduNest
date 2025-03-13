@@ -48,7 +48,7 @@ public class AuthenticationService {
         memberRepository.save(user);
 
         // Envoyer l'email de vérification
-//        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

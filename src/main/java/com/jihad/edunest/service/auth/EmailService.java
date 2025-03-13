@@ -1,5 +1,6 @@
 package com.jihad.edunest.service.auth;
 
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -88,6 +89,88 @@ public class EmailService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             throw new RuntimeException("Erreur lors de l'envoi de l'email de notification", e);
+        }
+    }
+
+    @Async
+    public void sendSchoolApprovalEmail(String toEmail, String schoolName) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            String htmlMsg = "<h3>Félicitations ! Votre école a été approuvée</h3>"
+                    + "<p>Nous sommes heureux de vous informer que votre école <strong>" + schoolName + "</strong> a été approuvée sur EduNest.</p>"
+                    + "<p>Vous pouvez maintenant vous connecter et gérer votre page d'école.</p>"
+                    + "<p>Votre compte a été mis à jour avec les droits d'administrateur d'école. Vous pouvez désormais :</p>"
+                    + "<ul>"
+                    + "<li>Mettre à jour les informations de votre école</li>"
+                    + "<li>Publier des offres spéciales</li>"
+                    + "<li>Gérer le personnel</li>"
+                    + "<li>Répondre aux demandes de contact</li>"
+                    + "<li>Voir les statistiques de visite de votre page</li>"
+                    + "</ul>"
+                    + "<p>Pour accéder à votre tableau de bord, <a href=\"" + frontendUrl + "/dashboard\">cliquez ici</a>.</p>";
+
+            helper.setText(htmlMsg, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Votre école a été approuvée sur EduNest");
+            helper.setFrom(fromEmail);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Erreur lors de l'envoi de l'email d'approbation d'école", e);
+        }
+    }
+
+    @Async
+    public void sendSchoolRejectionEmail(String toEmail, String schoolName, String rejectionReason) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            String htmlMsg = "<h3>Mise à jour concernant votre demande d'enregistrement d'école</h3>"
+                    + "<p>Nous avons examiné votre demande pour l'école <strong>" + schoolName + "</strong> sur EduNest.</p>"
+                    + "<p>Malheureusement, nous ne pouvons pas approuver votre demande pour le moment.</p>";
+
+            if (rejectionReason != null && !rejectionReason.isEmpty()) {
+                htmlMsg += "<p><strong>Raison :</strong> " + rejectionReason + "</p>";
+            }
+
+            htmlMsg += "<p>Vous pouvez soumettre une nouvelle demande en tenant compte des remarques ci-dessus.</p>"
+                    + "<p>Si vous avez des questions, n'hésitez pas à contacter notre équipe de support.</p>";
+
+            helper.setText(htmlMsg, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Mise à jour sur votre demande d'école - EduNest");
+            helper.setFrom(fromEmail);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Erreur lors de l'envoi de l'email de rejet d'école", e);
+        }
+    }
+
+    @Async
+    public void sendSchoolRegistrationNotification(String memberEmail, Long requestId) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            String htmlMsg = "<h3>Confirmation de votre demande d'enregistrement d'école</h3>"
+                    + "<p>Nous avons bien reçu votre demande d'enregistrement d'école sur EduNest.</p>"
+                    + "<p>Numéro de référence de votre demande : <strong>" + requestId + "</strong></p>"
+                    + "<p>Notre équipe va examiner votre demande dans les plus brefs délais. "
+                    + "Vous recevrez une notification par email dès que votre demande aura été traitée.</p>"
+                    + "<p>Vous pouvez suivre l'état de votre demande en vous connectant à votre compte EduNest.</p>";
+
+            helper.setText(htmlMsg, true);
+            helper.setTo(memberEmail);
+            helper.setSubject("Confirmation de votre demande d'enregistrement d'école - EduNest");
+            helper.setFrom(fromEmail);
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Erreur lors de l'envoi de l'email de confirmation de demande", e);
         }
     }
 }

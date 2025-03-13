@@ -7,16 +7,26 @@ spring:
     change-log: db/changelog/master.yaml
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: your-email@gmail.com
-    password: your-app-password
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 5f38e9747dc301
+    password: a5d998f9c7ffaa
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+
+#            // Looking to send emails in production? Check out our Email API/SMTP product!
+#            play.mailer {
+#            host = "sandbox.smtp.mailtrap.io"
+#            port = 2525
+#            ssl = no
+#            tls = yes
+#            user = "5f38e9747dc301"
+#            password = "a5d998f9c7ffaa"
+#        }
 
   datasource:
     driver-class-name: org.postgresql.Driver

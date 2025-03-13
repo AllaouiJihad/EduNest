@@ -16,9 +16,7 @@ public class School {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     private String address;
     private String postalCode;
     private String city;
@@ -26,12 +24,10 @@ public class School {
     private String email;
     private String website;
     private String description;
-    private SchoolStatus status;
-    /*private Float rating;*/
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
+    @Enumerated(EnumType.STRING)
+    private SchoolStatus status;
+
     @OneToOne(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private SchoolAdministrator administrator;
 
@@ -41,7 +37,6 @@ public class School {
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Staff> staff;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -49,16 +44,15 @@ public class School {
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ContactRequest> contactRequests;
 
-
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FavoriteSchool> favoritedBy;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "registration_request_id")
+    private SchoolRegistrationRequest registrationRequest;
 
     // Méthode utile
     public int getFavoriteCount() {
         return favoritedBy != null ? favoritedBy.size() : 0;
     }
-
-
-
-
 }
