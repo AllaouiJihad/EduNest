@@ -49,6 +49,7 @@ public class AuthenticationService {
 
         // Envoyer l'email de vérification
         emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+        verifyAccount(verificationToken);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
