@@ -1,5 +1,6 @@
 package com.jihad.edunest.exception;
 
+import com.jihad.edunest.exception.category.CategoryException;
 import com.jihad.edunest.web.vms.responce.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -109,4 +110,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(CategoryException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryException(CategoryException ex) {
+        ErrorResponse ErrorResponse = new ErrorResponse(
+
+                HttpStatus.BAD_REQUEST.value(),
+                "Erreur de catégorie : " + ex.getMessage(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(ErrorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 }

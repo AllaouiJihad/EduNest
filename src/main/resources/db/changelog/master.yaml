@@ -19,7 +19,11 @@ databaseChangeLog:
 #      file: db/changelog/2025/01/009-create-favorite-school.yaml
 #  - include:
 #      file: db/changelog/2025/01/010-create-school-visit.yaml
+#  - include:
+#      file: db/changelog/2025/03/10-01-changelog.yaml
+#  - include:
+#      file: db/changelog/2025/03/17-01-changelog.yaml
   - include:
-      file: db/changelog/2025/03/10-01-changelog.yaml
+      file: db/changelog/2025/03/17-01-changelog.yaml
 #  - include:
 #      file: db/changelog/2025/01/011-insert-initial-data.yaml

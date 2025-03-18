@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1741644321028-1
+      id: 1742254625134-1
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -22,13 +22,13 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: description
-                  type: VARCHAR(1000)
+                  type: VARCHAR(255)
               - column:
                   name: active
                   type: BOOLEAN
             tableName: category
   - changeSet:
-      id: 1741644321028-2
+      id: 1742254625134-2
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -47,10 +47,10 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: message
-                  type: VARCHAR(2000)
+                  type: VARCHAR(255)
               - column:
                   name: contact_status
-                  type: VARCHAR(50)
+                  type: SMALLINT
               - column:
                   name: created_at
                   type: DATETIME
@@ -62,7 +62,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: contact_request
   - changeSet:
-      id: 1741644321028-3
+      id: 1742254625134-3
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -87,10 +87,10 @@ databaseChangeLog:
                   type: DATETIME
               - column:
                   name: notes
-                  type: VARCHAR(1000)
+                  type: VARCHAR(255)
             tableName: favorite_school
   - changeSet:
-      id: 1741644321028-4
+      id: 1742254625134-4
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -116,8 +116,6 @@ databaseChangeLog:
               - column:
                   name: email
                   type: VARCHAR(255)
-                  constraints:
-                    unique: true
               - column:
                   name: password
                   type: VARCHAR(255)
@@ -127,8 +125,6 @@ databaseChangeLog:
               - column:
                   name: username
                   type: VARCHAR(255)
-                  constraints:
-                    unique: true
               - column:
                   name: deleted
                   type: BOOLEAN
@@ -146,10 +142,10 @@ databaseChangeLog:
                   type: DATETIME
               - column:
                   name: role
-                  type: VARCHAR(50)
+                  type: VARCHAR(255)
             tableName: member
   - changeSet:
-      id: 1741644321028-5
+      id: 1742254625134-5
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -165,7 +161,7 @@ databaseChangeLog:
                   type: BIGINT
               - column:
                   name: content
-                  type: VARCHAR(2000)
+                  type: VARCHAR(255)
               - column:
                   name: rating
                   type: FLOAT
@@ -180,7 +176,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: review
   - changeSet:
-      id: 1741644321028-6
+      id: 1742254625134-6
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -202,13 +198,13 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: postal_code
-                  type: VARCHAR(20)
+                  type: VARCHAR(255)
               - column:
                   name: city
                   type: VARCHAR(255)
               - column:
                   name: phone_number
-                  type: VARCHAR(20)
+                  type: VARCHAR(255)
               - column:
                   name: email
                   type: VARCHAR(255)
@@ -217,18 +213,19 @@ databaseChangeLog:
                   type: VARCHAR(255)
               - column:
                   name: description
-                  type: VARCHAR(2000)
+                  type: VARCHAR(255)
               - column:
                   name: status
-                  type: VARCHAR(50)
+                  type: VARCHAR(255)
               - column:
                   name: category_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
+              - column:
+                  name: registration_request_id
+                  type: BIGINT
             tableName: school
   - changeSet:
-      id: 1741644321028-7
+      id: 1742254625134-7
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -243,16 +240,15 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
                   name: member_id
                   type: BIGINT
-                  constraints:
-                    unique: true
-                    nullable: false
               - column:
+                  constraints:
+                    nullable: false
                   name: school_id
                   type: BIGINT
-                  constraints:
-                    nullable: false
               - column:
                   name: assigned_date
                   type: DATETIME
@@ -264,10 +260,10 @@ databaseChangeLog:
                   type: DATETIME
               - column:
                   name: admin_notes
-                  type: VARCHAR(1000)
+                  type: VARCHAR(255)
             tableName: school_administrator
   - changeSet:
-      id: 1741644321028-8
+      id: 1742254625134-8
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -295,7 +291,70 @@ databaseChangeLog:
                   type: BIGINT
             tableName: school_image
   - changeSet:
-      id: 1741644321028-9
+      id: 1742254625134-9
+      author: jihad.allaoui
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_schoolregistrationrequest
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: member_id
+                  type: BIGINT
+              - column:
+                  name: school_name
+                  type: VARCHAR(255)
+              - column:
+                  name: school_address
+                  type: VARCHAR(255)
+              - column:
+                  name: school_postal_code
+                  type: VARCHAR(255)
+              - column:
+                  name: school_city
+                  type: VARCHAR(255)
+              - column:
+                  name: school_phone_number
+                  type: VARCHAR(255)
+              - column:
+                  name: school_email
+                  type: VARCHAR(255)
+              - column:
+                  name: school_website
+                  type: VARCHAR(255)
+              - column:
+                  name: school_description
+                  type: VARCHAR(255)
+              - column:
+                  name: category_id
+                  type: BIGINT
+              - column:
+                  name: additional_info
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: submitted_at
+                  type: DATETIME
+              - column:
+                  name: reviewed_at
+                  type: DATETIME
+              - column:
+                  name: admin_review_notes
+                  type: VARCHAR(255)
+            tableName: school_registration_request
+  - changeSet:
+      id: 1742254625134-10
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -320,7 +379,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: school_visit
   - changeSet:
-      id: 1741644321028-10
+      id: 1742254625134-11
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -356,34 +415,34 @@ databaseChangeLog:
                   type: BIGINT
             tableName: staff
   - changeSet:
-      id: 1741644321028-11
+      id: 1742254625134-12
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
-            columnNames: member_id, school_id
-            constraintName: uc_favorite_school_member_school
-            tableName: favorite_school
+            columnNames: registration_request_id
+            constraintName: uc_school_registration_request
+            tableName: school
   - changeSet:
-      id: 1741644321028-12
+      id: 1742254625134-13
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
-            columnNames: email
-            constraintName: uc_member_email
-            tableName: member
+            columnNames: member_id
+            constraintName: uc_schooladministrator_member
+            tableName: school_administrator
   - changeSet:
-      id: 1741644321028-13
+      id: 1742254625134-14
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
         - addUniqueConstraint:
-            columnNames: username
-            constraintName: uc_member_username
-            tableName: member
+            columnNames: school_id
+            constraintName: uc_schooladministrator_school
+            tableName: school_administrator
   - changeSet:
-      id: 1741644321028-14
+      id: 1742254625134-15
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -392,7 +451,7 @@ databaseChangeLog:
             constraintName: uc_staff_user
             tableName: staff
   - changeSet:
-      id: 1741644321028-15
+      id: 1742254625134-16
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -403,7 +462,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: member
   - changeSet:
-      id: 1741644321028-16
+      id: 1742254625134-17
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -414,7 +473,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-17
+      id: 1742254625134-18
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -425,7 +484,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: member
   - changeSet:
-      id: 1741644321028-18
+      id: 1742254625134-19
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -436,7 +495,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-20
+      id: 1742254625134-20
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -447,7 +506,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: member
   - changeSet:
-      id: 1741644321028-21
+      id: 1742254625134-21
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -458,7 +517,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-22
+      id: 1742254625134-22
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -469,7 +528,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: member
   - changeSet:
-      id: 1741644321028-23
+      id: 1742254625134-23
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -480,7 +539,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-24
+      id: 1742254625134-24
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -491,7 +550,29 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-25
+      id: 1742254625134-25
+      author: jihad.allaoui
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: school_registration_request
+            constraintName: FK_SCHOOLREGISTRATIONREQUEST_ON_CATEGORY
+            referencedColumnNames: id
+            referencedTableName: category
+  - changeSet:
+      id: 1742254625134-26
+      author: jihad.allaoui
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: member_id
+            baseTableName: school_registration_request
+            constraintName: FK_SCHOOLREGISTRATIONREQUEST_ON_MEMBER
+            referencedColumnNames: id
+            referencedTableName: member
+  - changeSet:
+      id: 1742254625134-27
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -502,7 +583,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: member
   - changeSet:
-      id: 1741644321028-26
+      id: 1742254625134-28
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -513,7 +594,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-27
+      id: 1742254625134-29
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -524,7 +605,18 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: category
   - changeSet:
-      id: 1741644321028-29
+      id: 1742254625134-30
+      author: jihad.allaoui
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: registration_request_id
+            baseTableName: school
+            constraintName: FK_SCHOOL_ON_REGISTRATION_REQUEST
+            referencedColumnNames: id
+            referencedTableName: school_registration_request
+  - changeSet:
+      id: 1742254625134-31
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -535,7 +627,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: school
   - changeSet:
-      id: 1741644321028-30
+      id: 1742254625134-32
       author: jihad.allaoui
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -545,3 +637,4 @@ databaseChangeLog:
             constraintName: FK_STAFF_ON_USER
             referencedColumnNames: id
             referencedTableName: member
+

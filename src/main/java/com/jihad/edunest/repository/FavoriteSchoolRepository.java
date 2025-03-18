@@ -18,4 +18,8 @@ public interface FavoriteSchoolRepository extends JpaRepository<FavoriteSchool, 
     boolean existsByMemberAndSchool(Member member, School school);
 
     void deleteByMemberAndSchool(Member member, School school);
+
+    List<FavoriteSchool> findByMemberIdOrderByAddedDateDesc(Long memberId);
+    boolean existsByMemberIdAndSchoolId(Long memberId, Long schoolId);
+    void deleteByMemberIdAndSchoolId(Long memberId, Long schoolId);
 }
