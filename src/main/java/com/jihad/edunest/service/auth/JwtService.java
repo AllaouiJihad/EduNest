@@ -1,5 +1,6 @@
 package com.jihad.edunest.service.auth;
 
+import com.jihad.edunest.domaine.entities.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,7 +38,15 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> claims = new HashMap<>();
+        if (userDetails instanceof Member member) {
+            claims.put("id", member.getId());
+            claims.put("firstName", member.getFirstName());
+            claims.put("lastName", member.getLastName());
+            claims.put("role", member.getRole().toString());
+            // Autres propriétés que vous souhaitez inclure
+        }
+        return generateToken(claims, userDetails);
     }
 
     public String generateToken(
