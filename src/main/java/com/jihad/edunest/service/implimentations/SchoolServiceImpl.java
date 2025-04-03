@@ -3,6 +3,7 @@ package com.jihad.edunest.service.implimentations;
 import com.jihad.edunest.domaine.entities.Review;
 import com.jihad.edunest.domaine.entities.School;
 import com.jihad.edunest.domaine.entities.SchoolImage;
+import com.jihad.edunest.domaine.enums.SchoolStatus;
 import com.jihad.edunest.repository.ReviewRepository;
 import com.jihad.edunest.repository.SchoolImageRepository;
 import com.jihad.edunest.repository.SchoolRepository;
@@ -69,6 +70,52 @@ public class SchoolServiceImpl implements SchoolService {
 
         return mapToDetailsResponse(school, averageRating, reviewCount, images, reviews);
     }
+
+    @Override
+    public Page<SchoolSearchResponse> getAllSchools(int page, int size, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(
+                "desc".equalsIgnoreCase(sortDirection) ?
+                        Sort.Direction.DESC : Sort.Direction.ASC,
+                sortBy);
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<School> schools = schoolRepository.findAll(pageable);
+
+        return schools.map(this::mapToSearchResponse);
+    }
+
+    @Override
+    public List<SchoolSearchResponse> getAllActiveSchools() {
+        List<School> activeSchools = schoolRepository.findByStatus(SchoolStatus.APPROVED);
+        return activeSchools.stream()
+                .map(this::mapToSearchResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteSchool(Long schoolId) {
+        if (!schoolRepository.existsById(schoolId)) {
+            return false;
+        }
+
+        schoolRepository.deleteById(schoolId);
+        return true;
+    }
+
+    @Override
+    public Page<SchoolSearchResponse> getSchoolsByCategory(Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Page<School> schools = schoolRepository.findByCategoryId(categoryId, pageable);
+        return schools.map(this::mapToSearchResponse);
+    }
+
+    @Override
+    public Page<SchoolSearchResponse> getSchoolsByCity(String city, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Page<School> schools = schoolRepository.findByCity(city, pageable);
+        return schools.map(this::mapToSearchResponse);
+    }
+
 
     private SchoolSearchResponse mapToSearchResponse(School school) {
         Float averageRating = schoolRepository.getAverageRatingBySchoolId(school.getId());
