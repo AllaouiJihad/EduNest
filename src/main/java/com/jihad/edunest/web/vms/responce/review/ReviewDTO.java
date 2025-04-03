@@ -17,4 +17,6 @@ public class ReviewDTO {
     private Float rating;
     private LocalDateTime createdAt;
     private String memberName;
+    private Long schoolId;
+    private String schoolName;
 }
